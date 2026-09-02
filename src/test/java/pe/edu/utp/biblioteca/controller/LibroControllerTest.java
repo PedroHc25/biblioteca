@@ -60,4 +60,22 @@ void crearSegundoLibro_deberiaRetornarlo() throws Exception {
             .andExpect(jsonPath("$.autor").value("Antoine de Saint-Exupéry"));
 }
 
+@Test
+void crearLibro_anioInvalido_deberiaRetornar400() throws Exception {
+
+    mockMvc.perform(post("/api/libros")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("""
+                {
+                  "id": 3,
+                  "titulo": "Don Quijote",
+                  "autor": "Miguel de Cervantes",
+                  "categoria": "Novela",
+                  "anio": "ABC",
+                  "estado": "Disponible"
+                }
+                """))
+            .andExpect(status().isBadRequest());
+}
+
 }
