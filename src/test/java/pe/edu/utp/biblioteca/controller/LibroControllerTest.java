@@ -38,4 +38,26 @@ public class LibroControllerTest {
                 .andExpect(jsonPath("$.titulo").value("Cien años de soledad"))
                 .andExpect(jsonPath("$.autor").value("Gabriel García Márquez"));
     }
+
+    @Test
+void crearSegundoLibro_deberiaRetornarlo() throws Exception {
+
+    mockMvc.perform(post("/api/libros")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("""
+                {
+                  "id": 2,
+                  "titulo": "El principito",
+                  "autor": "Antoine de Saint-Exupéry",
+                  "categoria": "Literatura",
+                  "anio": 1943,
+                  "estado": "Disponible"
+                }
+                """))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id").value(2))
+            .andExpect(jsonPath("$.titulo").value("El principito"))
+            .andExpect(jsonPath("$.autor").value("Antoine de Saint-Exupéry"));
+}
+
 }
