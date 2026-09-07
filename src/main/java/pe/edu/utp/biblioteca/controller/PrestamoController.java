@@ -42,4 +42,5 @@ public class PrestamoController {
         prestamos.add(prestamo);
         return ResponseEntity.status(HttpStatus.CREATED).body(prestamo);
     }
+    
 }
