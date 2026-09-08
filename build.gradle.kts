@@ -29,4 +29,14 @@ tasks.withType<Test> {
     testLogging {
         events("passed", "failed", "skipped")
     }
+
+    afterSuite(KotlinClosure2<TestDescriptor, TestResult, Unit>({ descriptor, result ->
+        if (descriptor.parent == null) {
+            println("========================================")
+            println("TOTAL DE TESTS: ${result.testCount}")
+            println("TESTS FALLIDOS: ${result.failedTestCount}")
+            println("TESTS EXITOSOS: ${result.successfulTestCount}")
+            println("========================================")
+        }
+    }))
 }
