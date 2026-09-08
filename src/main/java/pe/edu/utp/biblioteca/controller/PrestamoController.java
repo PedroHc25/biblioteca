@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import pe.edu.utp.biblioteca.model.Prestamo;
 
 @RestController
-@RequestMapping("/prestamos")
+@RequestMapping("/api/prestamos")
 public class PrestamoController {
 
     private final List<Prestamo> prestamos = new ArrayList<>();

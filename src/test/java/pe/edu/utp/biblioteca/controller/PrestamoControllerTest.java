@@ -26,7 +26,7 @@ class PrestamoControllerTest {
     @Test
     void listarPrestamosDevuelveListaVaciaInicialmente() throws Exception {
 
-        mockMvc.perform(get("/prestamos"))
+        mockMvc.perform(get("/api/prestamos"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$").isEmpty());
@@ -35,7 +35,7 @@ class PrestamoControllerTest {
     @Test
     void listarPrestamosDespuesDeCrearUnoDevuelveListaConPrestamo() throws Exception {
 
-        mockMvc.perform(post("/prestamos")
+        mockMvc.perform(post("/api/prestamos")
                         .contentType(APPLICATION_JSON)
                         .content("""
                                 {
@@ -49,7 +49,7 @@ class PrestamoControllerTest {
                                 """))
                 .andExpect(status().isCreated());
 
-        mockMvc.perform(get("/prestamos"))
+        mockMvc.perform(get("/api/prestamos"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$.length()").value(1))
@@ -59,7 +59,7 @@ class PrestamoControllerTest {
     @Test
     void listarPrestamosDespuesDeCrearDosDevuelveDosPrestamos() throws Exception {
 
-        mockMvc.perform(post("/prestamos")
+        mockMvc.perform(post("/api/prestamos")
                         .contentType(APPLICATION_JSON)
                         .content("""
                                 {
@@ -73,7 +73,7 @@ class PrestamoControllerTest {
                                 """))
                 .andExpect(status().isCreated());
 
-        mockMvc.perform(post("/prestamos")
+        mockMvc.perform(post("/api/prestamos")
                         .contentType(APPLICATION_JSON)
                         .content("""
                                 {
@@ -87,7 +87,7 @@ class PrestamoControllerTest {
                                 """))
                 .andExpect(status().isCreated());
 
-        mockMvc.perform(get("/prestamos"))
+        mockMvc.perform(get("/api/prestamos"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$.length()").value(2));
@@ -100,7 +100,7 @@ class PrestamoControllerTest {
     @Test
     void crearPrestamoDevuelveCreatedYAsignaId() throws Exception {
 
-        mockMvc.perform(post("/prestamos")
+        mockMvc.perform(post("/api/prestamos")
                         .contentType(APPLICATION_JSON)
                         .content("""
                                 {
@@ -120,7 +120,7 @@ class PrestamoControllerTest {
     @Test
     void crearSegundoPrestamoAsignaIdDiferente() throws Exception {
 
-        mockMvc.perform(post("/prestamos")
+        mockMvc.perform(post("/api/prestamos")
                         .contentType(APPLICATION_JSON)
                         .content("""
                                 {
@@ -135,7 +135,7 @@ class PrestamoControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(1));
 
-        mockMvc.perform(post("/prestamos")
+        mockMvc.perform(post("/api/prestamos")
                         .contentType(APPLICATION_JSON)
                         .content("""
                                 {
@@ -155,7 +155,7 @@ class PrestamoControllerTest {
     @Test
     void crearPrestamoConDatosCompletosDevuelveInformacionCorrecta() throws Exception {
 
-        mockMvc.perform(post("/prestamos")
+        mockMvc.perform(post("/api/prestamos")
                         .contentType(APPLICATION_JSON)
                         .content("""
                                 {
