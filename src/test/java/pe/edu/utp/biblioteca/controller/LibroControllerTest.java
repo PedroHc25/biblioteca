@@ -5,7 +5,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -155,6 +155,18 @@ public class LibroControllerTest {
   }
 
   @Test
+  void obtenerTodosLosLibros_rutaIncorrecta_deberiaRetornar404() throws Exception {
+      mockMvc.perform(get("/api/librosss"))
+              .andExpect(status().isNotFound());
+  }
+
+  @Test
+  void usarMetodoNoSoportado_deberiaRetornar405() throws Exception {
+      mockMvc.perform(put("/api/libros"))
+              .andExpect(status().isMethodNotAllowed());
+  }
+
+  @Test
   void obtenerLibroPorIdExistente_deberiaRetornarLibro() throws Exception {
     mockMvc.perform(post("/api/libros")
         .contentType(MediaType.APPLICATION_JSON)
@@ -178,8 +190,16 @@ public class LibroControllerTest {
   }
 
   @Test
-  void obtenerLibroPorIdInexistente_deberiaRetornar404() throws Exception {
+  void obtenerLibroInexistente_deberiaRetornar404() throws Exception {
     mockMvc.perform(get("/api/libros/999"))
         .andExpect(status().isNotFound());
   }
+
+  @Test
+  void obtenerLibroPorId_formatoIncorrecto_deberiaRetornar400() throws Exception {
+      mockMvc.perform(get("/api/libros/abc"))
+              .andExpect(status().isBadRequest());
+  }
+
+
 }
