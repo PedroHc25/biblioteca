@@ -7,7 +7,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,25 +21,20 @@ public class PrestamoController {
     private final List<Prestamo> prestamos = new ArrayList<>();
     private final AtomicInteger siguienteId = new AtomicInteger(1);
 
+    // GET /prestamos
     @GetMapping
     public List<Prestamo> listarPrestamos() {
         return prestamos;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Prestamo> buscarPrestamo(@PathVariable int id) {
-        return prestamos.stream()
-                .filter(prestamo -> prestamo.getId() == id)
-                .findFirst()
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
+    // POST /prestamos
     @PostMapping
     public ResponseEntity<Prestamo> crearPrestamo(@RequestBody Prestamo prestamo) {
         prestamo.setId(siguienteId.getAndIncrement());
         prestamos.add(prestamo);
-        return ResponseEntity.status(HttpStatus.CREATED).body(prestamo);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(prestamo);
     }
-    
 }
