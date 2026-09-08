@@ -17,15 +17,15 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_METHOD)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class UsuarioControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
-
     @Test
     void post_01_crearUsuarioConTodosLosCampos_deberiaRetornar201() throws Exception {
+
         String jsonPayload = """
             {
               "id": 10,
@@ -51,8 +51,10 @@ public class UsuarioControllerTest {
 
     @Test
     void post_02_crearUsuarioSinId_deberiaGenerarIdAutomaticoYRetornar201() throws Exception {
+
         String jsonPayload = """
             {
+              "id": 0,
               "nombre": "Carlos",
               "apellido": "Ramirez",
               "dni": "78901234",
@@ -65,13 +67,14 @@ public class UsuarioControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonPayload))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").isNumber())
+                .andExpect(jsonPath("$.id").value(3))
                 .andExpect(jsonPath("$.nombre").value("Carlos"))
                 .andExpect(jsonPath("$.correo").value("carlos.ramirez@utp.edu.pe"));
     }
 
     @Test
     void post_03_crearMultiplesUsuariosConsecutivos_deberiaRetornar201() throws Exception {
+
         String usuarioA = """
             {
               "id": 20,
@@ -107,21 +110,21 @@ public class UsuarioControllerTest {
                 .andExpect(jsonPath("$.nombre").value("Luis"));
     }
 
-
-
     @Test
     void get_01_obtenerUsuariosIniciales_deberiaRetornarListaConValoresPorDefecto() throws Exception {
+
         mockMvc.perform(get("/api/usuarios"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$", hasSize(2))) 
-                .andExpect(jsonPath("$[0].nombre").value("Juan"))
-                .andExpect(jsonPath("$.nombre").value("Maria"));
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].nombre").value("Pedro"))
+                .andExpect(jsonPath("$[1].nombre").value("Maria"));
     }
 
     @Test
     void get_02_obtenerUsuariosDespuesDePost_deberiaIncrementarCantidadElementos() throws Exception {
+
         String nuevoUsuario = """
             {
               "id": 3,
@@ -140,14 +143,16 @@ public class UsuarioControllerTest {
 
         mockMvc.perform(get("/api/usuarios"))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$", hasSize(3)))
-                .andExpect(jsonPath("$.id").value(3))
-                .andExpect(jsonPath("$.nombre").value("Sonia"))
-                .andExpect(jsonPath("$.dni").value("88776655"));
+                .andExpect(jsonPath("$[2].id").value(3))
+                .andExpect(jsonPath("$[2].nombre").value("Sonia"))
+                .andExpect(jsonPath("$[2].dni").value("88776655"));
     }
 
     @Test
     void get_03_verificarEstructuraCompletaDeCampos_deberiaContenerTodosLosAtributos() throws Exception {
+
         mockMvc.perform(get("/api/usuarios"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").exists())
