@@ -18,9 +18,22 @@ repositories {
 }
 
 dependencies {
-	implementation("org.springframework.boot:spring-boot-starter-webmvc")
-	testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
-	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+//WEB/API REST//
+    implementation("org.springframework.boot:spring-boot-starter-webmvc")
+
+//BD-JPA-HIBERNATE//
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+
+//BD-MYSQL//
+    runtimeOnly("com.mysql:mysql-connector-j")
+
+//SECURITY
+
+//JWT
+
+//PRUEBAS//
+    testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 tasks.withType<Test> {
