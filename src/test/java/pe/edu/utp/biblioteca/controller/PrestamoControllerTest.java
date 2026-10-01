@@ -11,10 +11,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import pe.edu.utp.biblioteca.security.JwtService;
 
 @WebMvcTest(PrestamoController.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class PrestamoControllerTest {
+  @MockitoBean
+private JwtService jwtService;
 
     @Autowired
     private MockMvc mockMvc;
