@@ -37,6 +37,7 @@ runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.6")
 //PRUEBAS//
     testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testImplementation("org.springframework.security:spring-security-test")
 }
 
 tasks.withType<Test> {
