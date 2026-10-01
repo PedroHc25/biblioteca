@@ -18,7 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @SpringBootTest
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 @ActiveProfiles("test")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class UsuarioControllerTest {
@@ -125,11 +125,12 @@ void get_01_obtenerUsuariosIniciales_deberiaRetornarListaVacia()
         throws Exception {
 
     mockMvc.perform(get("/api/usuarios"))
-            .andExpect(status().isOk())
-            .andExpect(content().contentTypeCompatibleWith(
-                    MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$").isArray())
-            .andExpect(jsonPath("$", hasSize(0)));
+        .andDo(print())
+        .andExpect(status().isOk())
+        .andExpect(content().contentTypeCompatibleWith(
+                MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$").isArray())
+        .andExpect(jsonPath("$", hasSize(0)));
 }
 
 @Test
