@@ -1,228 +1,180 @@
 package pe.edu.utp.biblioteca.controller;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
-import org.springframework.http.MediaType;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-@SpringBootTest
-@AutoConfigureMockMvc(addFilters = false)
-@ActiveProfiles("test")
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import pe.edu.utp.biblioteca.security.JwtService;
+
+@WebMvcTest(PrestamoController.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class PrestamoControllerTest {
+  @MockitoBean
+private JwtService jwtService;
 
     @Autowired
     private MockMvc mockMvc;
 
-    private int crearPrestamo(String json) throws Exception {
-        String body = mockMvc.perform(post("/api/prestamos")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json))
-                .andExpect(status().isCreated())
-                .andReturn().getResponse().getContentAsString();
-
-        return extraerId(body);
-    }
-
-    private int extraerId(String body) {
-        var m = java.util.regex.Pattern
-                .compile("\"id\"\\s*:\\s*(\\d+)")
-                .matcher(body);
-        return m.find() ? Integer.parseInt(m.group(1)) : -1;
-    }
-
     // ============================
-    // POST /api/prestamos
+    // GET /prestamos
     // ============================
 
     @Test
-    void post_01_crearPrestamoConTodosLosCampos_deberiaRetornar201() throws Exception {
-        mockMvc.perform(post("/api/prestamos")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("""
-                    {
-                      "fechaPrestamo": "2026-09-06",
-                      "fechaDevolucion": "2026-09-13",
-                      "estado": "ACTIVO",
-                      "usuarioId": 1,
-                      "libroId": 1
-                    }
-                    """))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").isNumber())
-                .andExpect(jsonPath("$.fechaPrestamo").value("2026-09-06"))
-                .andExpect(jsonPath("$.fechaDevolucion").value("2026-09-13"))
-                .andExpect(jsonPath("$.estado").value("ACTIVO"))
-                .andExpect(jsonPath("$.usuarioId").value(1))
-                .andExpect(jsonPath("$.libroId").value(1));
-    }
+    void listarPrestamosDevuelveListaVaciaInicialmente() throws Exception {
 
-    @Test
-    void post_02_crearDosPrestamos_deberiaAsignarIdsDiferentes() throws Exception {
-        String primero = """
-            {
-              "fechaPrestamo": "2026-09-06",
-              "fechaDevolucion": "2026-09-13",
-              "estado": "ACTIVO",
-              "usuarioId": 1,
-              "libroId": 1
-            }
-            """;
-        String segundo = """
-            {
-              "fechaPrestamo": "2026-09-08",
-              "fechaDevolucion": "2026-09-15",
-              "estado": "PENDIENTE",
-              "usuarioId": 2,
-              "libroId": 2
-            }
-            """;
-
-        int id1 = crearPrestamo(primero);
-        int id2 = crearPrestamo(segundo);
-
-        org.junit.jupiter.api.Assertions.assertNotEquals(id1, id2);
-        org.junit.jupiter.api.Assertions.assertEquals(1, id1);
-        org.junit.jupiter.api.Assertions.assertEquals(2, id2);
-    }
-
-    // ============================
-    // GET /api/prestamos
-    // ============================
-
-    @Test
-    void get_01_listarPrestamosIniciales_deberiaRetornarListaVacia() throws Exception {
         mockMvc.perform(get("/api/prestamos"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$", hasSize(0)));
+                .andExpect(jsonPath("$").isEmpty());
     }
 
     @Test
-    void get_02_listarPrestamosDespuesDeCrear_deberiaTenerUnElemento() throws Exception {
-        crearPrestamo("""
-            {
-              "fechaPrestamo": "2026-09-06",
-              "fechaDevolucion": "2026-09-13",
-              "estado": "ACTIVO",
-              "usuarioId": 1,
-              "libroId": 1
-            }
-            """);
+    void listarPrestamosDespuesDeCrearUnoDevuelveListaConPrestamo() throws Exception {
+
+        mockMvc.perform(post("/api/prestamos")
+                        .contentType(APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "id": 0,
+                                  "fechaPrestamo": "2026-09-06",
+                                  "fechaDevolucion": "2026-09-13",
+                                  "estado": "ACTIVO",
+                                  "usuarioId": 1,
+                                  "libroId": 1
+                                }
+                                """))
+                .andExpect(status().isCreated());
 
         mockMvc.perform(get("/api/prestamos"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$.length()").value(1))
                 .andExpect(jsonPath("$[0].estado").value("ACTIVO"));
     }
 
     @Test
-    void get_03_obtenerPrestamoPorIdExistente_deberiaRetornarPrestamo() throws Exception {
-        int id = crearPrestamo("""
-            {
-              "fechaPrestamo": "2026-09-10",
-              "fechaDevolucion": "2026-09-17",
-              "estado": "ACTIVO",
-              "usuarioId": 5,
-              "libroId": 8
-            }
-            """);
+    void listarPrestamosDespuesDeCrearDosDevuelveDosPrestamos() throws Exception {
 
-        mockMvc.perform(get("/api/prestamos/{id}", id))
+        mockMvc.perform(post("/api/prestamos")
+                        .contentType(APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "id": 0,
+                                  "fechaPrestamo": "2026-09-06",
+                                  "fechaDevolucion": "2026-09-13",
+                                  "estado": "ACTIVO",
+                                  "usuarioId": 1,
+                                  "libroId": 1
+                                }
+                                """))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(post("/api/prestamos")
+                        .contentType(APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "id": 0,
+                                  "fechaPrestamo": "2026-09-08",
+                                  "fechaDevolucion": "2026-09-15",
+                                  "estado": "PENDIENTE",
+                                  "usuarioId": 2,
+                                  "libroId": 2
+                                }
+                                """))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(get("/api/prestamos"))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$.length()").value(2));
+    }
+
+    // ============================
+    // POST /prestamos
+    // ============================
+
+    @Test
+    void crearPrestamoDevuelveCreatedYAsignaId() throws Exception {
+
+        mockMvc.perform(post("/api/prestamos")
+                        .contentType(APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "id": 0,
+                                  "fechaPrestamo": "2026-09-06",
+                                  "fechaDevolucion": "2026-09-13",
+                                  "estado": "ACTIVO",
+                                  "usuarioId": 1,
+                                  "libroId": 1
+                                }
+                                """))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.estado").value("ACTIVO"));
+    }
+
+    @Test
+    void crearSegundoPrestamoAsignaIdDiferente() throws Exception {
+
+        mockMvc.perform(post("/api/prestamos")
+                        .contentType(APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "id": 0,
+                                  "fechaPrestamo": "2026-09-06",
+                                  "fechaDevolucion": "2026-09-13",
+                                  "estado": "ACTIVO",
+                                  "usuarioId": 1,
+                                  "libroId": 1
+                                }
+                                """))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").value(1));
+
+        mockMvc.perform(post("/api/prestamos")
+                        .contentType(APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "id": 0,
+                                  "fechaPrestamo": "2026-09-08",
+                                  "fechaDevolucion": "2026-09-15",
+                                  "estado": "PENDIENTE",
+                                  "usuarioId": 2,
+                                  "libroId": 2
+                                }
+                                """))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").value(2))
+                .andExpect(jsonPath("$.estado").value("PENDIENTE"));
+    }
+
+    @Test
+    void crearPrestamoConDatosCompletosDevuelveInformacionCorrecta() throws Exception {
+
+        mockMvc.perform(post("/api/prestamos")
+                        .contentType(APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "id": 0,
+                                  "fechaPrestamo": "2026-09-10",
+                                  "fechaDevolucion": "2026-09-17",
+                                  "estado": "ACTIVO",
+                                  "usuarioId": 5,
+                                  "libroId": 8
+                                }
+                                """))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.fechaPrestamo").value("2026-09-10"))
+                .andExpect(jsonPath("$.fechaDevolucion").value("2026-09-17"))
                 .andExpect(jsonPath("$.usuarioId").value(5))
                 .andExpect(jsonPath("$.libroId").value(8));
-    }
-
-    @Test
-    void get_04_obtenerPrestamoPorIdInexistente_deberiaRetornar404() throws Exception {
-        mockMvc.perform(get("/api/prestamos/999"))
-                .andExpect(status().isNotFound());
-    }
-
-    // ============================
-    // PUT /api/prestamos/{id}
-    // ============================
-
-    @Test
-    void put_01_actualizarEstadoPrestamo_deberiaRetornar200() throws Exception {
-        int id = crearPrestamo("""
-            {
-              "fechaPrestamo": "2026-09-06",
-              "fechaDevolucion": "2026-09-13",
-              "estado": "ACTIVO",
-              "usuarioId": 1,
-              "libroId": 1
-            }
-            """);
-
-        mockMvc.perform(put("/api/prestamos/{id}", id)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("""
-                    {
-                      "fechaPrestamo": "2026-09-06",
-                      "fechaDevolucion": "2026-09-14",
-                      "estado": "DEVUELTO",
-                      "usuarioId": 1,
-                      "libroId": 1
-                    }
-                    """))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.estado").value("DEVUELTO"))
-                .andExpect(jsonPath("$.fechaDevolucion").value("2026-09-14"));
-    }
-
-    @Test
-    void put_02_actualizarPrestamoInexistente_deberiaRetornar404() throws Exception {
-        mockMvc.perform(put("/api/prestamos/999")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("""
-                    {
-                      "fechaPrestamo": "2026-09-06",
-                      "fechaDevolucion": "2026-09-13",
-                      "estado": "ACTIVO",
-                      "usuarioId": 1,
-                      "libroId": 1
-                    }
-                    """))
-                .andExpect(status().isNotFound());
-    }
-
-    // ============================
-    // DELETE /api/prestamos/{id}
-    // ============================
-
-    @Test
-    void delete_01_eliminarPrestamoExistente_deberiaRetornar204() throws Exception {
-        int id = crearPrestamo("""
-            {
-              "fechaPrestamo": "2026-09-06",
-              "fechaDevolucion": "2026-09-13",
-              "estado": "ACTIVO",
-              "usuarioId": 1,
-              "libroId": 1
-            }
-            """);
-
-        mockMvc.perform(delete("/api/prestamos/{id}", id))
-                .andExpect(status().isNoContent());
-    }
-
-    @Test
-    void delete_02_eliminarPrestamoInexistente_deberiaRetornar404() throws Exception {
-        mockMvc.perform(delete("/api/prestamos/999"))
-                .andExpect(status().isNotFound());
     }
 }

@@ -1,39 +1,19 @@
 package pe.edu.utp.biblioteca.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-
-@Entity
-@Table(name = "prestamos")
 public class Prestamo {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
-    @Column(name = "fecha_prestamo")
+    private int id;
     private String fechaPrestamo;
-
-    @Column(name = "fecha_devolucion")
     private String fechaDevolucion;
-
     private String estado;
-
-    @Column(name = "usuario_id")
-    private Integer usuarioId;
-
-    @Column(name = "libro_id")
-    private Integer libroId;
+    private int usuarioId;
+    private int libroId;
 
     public Prestamo() {
     }
 
-    public Prestamo(Integer id, String fechaPrestamo, String fechaDevolucion,
-                    String estado, Integer usuarioId, Integer libroId) {
+    public Prestamo(int id, String fechaPrestamo, String fechaDevolucion,
+                    String estado, int usuarioId, int libroId) {
         this.id = id;
         this.fechaPrestamo = fechaPrestamo;
         this.fechaDevolucion = fechaDevolucion;
@@ -42,11 +22,11 @@ public class Prestamo {
         this.libroId = libroId;
     }
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -74,19 +54,19 @@ public class Prestamo {
         this.estado = estado;
     }
 
-    public Integer getUsuarioId() {
+    public int getUsuarioId() {
         return usuarioId;
     }
 
-    public void setUsuarioId(Integer usuarioId) {
+    public void setUsuarioId(int usuarioId) {
         this.usuarioId = usuarioId;
     }
 
-    public Integer getLibroId() {
+    public int getLibroId() {
         return libroId;
     }
 
-    public void setLibroId(Integer libroId) {
+    public void setLibroId(int libroId) {
         this.libroId = libroId;
     }
 }

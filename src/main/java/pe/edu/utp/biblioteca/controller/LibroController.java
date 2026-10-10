@@ -1,70 +1,53 @@
 package pe.edu.utp.biblioteca.controller;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import pe.edu.utp.biblioteca.model.Libro;
-import pe.edu.utp.biblioteca.service.LibroService;
 
 @RestController
 @RequestMapping("/api/libros")
 public class LibroController {
 
-    private final LibroService libroService;
+  private final Map<Integer, Libro> libros = new ConcurrentHashMap<>();
 
-    public LibroController(LibroService libroService) {
-        this.libroService = libroService;
-    }
+  @GetMapping
+  public Collection<Libro> obtenerLibros() {
+    return libros.values();
+  }
 
-    // GET /api/libros
-    @GetMapping
-    public List<Libro> obtenerLibros() {
-        return libroService.listarTodos();
+  @GetMapping("/{id}")
+  public ResponseEntity<Libro> obtenerLibroPorId(@PathVariable int id) {
+    Libro libro = libros.get(id);
+    if (libro == null) {
+      return ResponseEntity.notFound().build();
     }
+    return ResponseEntity.ok(libro);
+  }
 
-    // GET /api/libros/{id}
-    @GetMapping("/{id}")
-    public ResponseEntity<Libro> obtenerLibroPorId(@PathVariable Integer id) {
-        return libroService.buscarPorId(id)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
+  @PostMapping
+  public Libro crearLibro(@RequestBody Libro libro) {
+    libros.put(libro.getId(), libro);
+    return libro;
+  }
 
-    // POST /api/libros
-    @PostMapping
-    public ResponseEntity<Libro> crearLibro(@RequestBody Libro libro) {
-        Libro libroGuardado = libroService.guardar(libro);
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(libroGuardado);
-    }
+  @DeleteMapping("/{id}")
+  public ResponseEntity<Void> eliminarLibro(@PathVariable int id) {
+    Libro libroEliminado = libros.remove(id);
 
-    // PUT /api/libros/{id}
-    @PutMapping("/{id}")
-    public ResponseEntity<Libro> actualizarLibro(
-            @PathVariable Integer id, @RequestBody Libro libro) {
-        return libroService.buscarPorId(id)
-                .map(existente ->
-                        ResponseEntity.ok(libroService.actualizar(id, libro)))
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    if (libroEliminado == null) {
+      return ResponseEntity.notFound().build();
     }
-
-    // DELETE /api/libros/{id}
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarLibro(@PathVariable Integer id) {
-        if (libroService.eliminar(id)) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
-    }
+    return ResponseEntity.noContent().build();
+  }
 }
