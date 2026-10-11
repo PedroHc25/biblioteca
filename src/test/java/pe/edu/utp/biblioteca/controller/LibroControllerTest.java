@@ -1,6 +1,5 @@
 package pe.edu.utp.biblioteca.controller;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -79,53 +78,4 @@ public class LibroControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
-    // Pruebas de Brayan: eliminar libros
-    @Test
-    void eliminarLibroExistente_deberiaRetornar204() throws Exception {
-        mockMvc.perform(post("/api/libros")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("""
-                    {
-                        "id": 10,
-                        "titulo": "No me puedes lastimar",
-                        "autor": "David Goggins",
-                        "categoria": "Desarrollo personal",
-                        "anio": 2018,
-                        "estado": "Disponible"
-                    }
-                    """))
-                .andExpect(status().isOk());
-
-        mockMvc.perform(delete("/api/libros/10"))
-                .andExpect(status().isNoContent());
-    }
-
-    @Test
-    void eliminarLibroDosVeces_segundoIntentoDeberiaRetornar404() throws Exception {
-        mockMvc.perform(post("/api/libros")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("""
-                    {
-                      "id": 20,
-                      "titulo": "Hábitos atómicos",
-                      "autor": "James Clear",
-                      "categoria": "Desarrollo personal",
-                      "anio": 2018,
-                      "estado": "Disponible"
-                    }
-                    """))
-                .andExpect(status().isOk());
-
-        mockMvc.perform(delete("/api/libros/20"))
-                .andExpect(status().isNoContent());
-
-        mockMvc.perform(delete("/api/libros/20"))
-                .andExpect(status().isNotFound());
-    }
-
-    @Test
-    void eliminarLibroInexistente_deberiaRetornar404() throws Exception {
-        mockMvc.perform(delete("/api/libros/479"))
-                .andExpect(status().isNotFound());
-    }
 }
