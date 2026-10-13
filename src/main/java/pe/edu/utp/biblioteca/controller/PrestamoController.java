@@ -1,8 +1,6 @@
 package pe.edu.utp.biblioteca.controller;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,28 +11,33 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import pe.edu.utp.biblioteca.model.Prestamo;
+import pe.edu.utp.biblioteca.service.PrestamoService;
 
 @RestController
 @RequestMapping("/api/prestamos")
 public class PrestamoController {
 
-    private final List<Prestamo> prestamos = new ArrayList<>();
-    private final AtomicInteger siguienteId = new AtomicInteger(1);
+    private final PrestamoService prestamoService;
 
-    // GET /prestamos
+    public PrestamoController(PrestamoService prestamoService) {
+        this.prestamoService = prestamoService;
+    }
+
+    // GET /api/prestamos
     @GetMapping
     public List<Prestamo> listarPrestamos() {
-        return prestamos;
+        return prestamoService.listarTodos();
     }
 
-    // POST /prestamos
+
+    // POST /api/prestamos
     @PostMapping
     public ResponseEntity<Prestamo> crearPrestamo(@RequestBody Prestamo prestamo) {
-        prestamo.setId(siguienteId.getAndIncrement());
-        prestamos.add(prestamo);
-
+        Prestamo prestamoGuardado = prestamoService.guardar(prestamo);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(prestamo);
+                .body(prestamoGuardado);
     }
+
+
 }

@@ -1,7 +1,8 @@
+
 package pe.edu.utp.biblioteca.controller;
 
-import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,31 +10,54 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import pe.edu.utp.biblioteca.dto.UsuarioResponse;
 import pe.edu.utp.biblioteca.model.Usuario;
+import pe.edu.utp.biblioteca.service.UsuarioService;
+
 
 @RestController
 @RequestMapping("/api/usuarios")
 public class UsuarioController {
 
-    private final List<Usuario> usuarios = new ArrayList<>();
+    private final UsuarioService usuarioService;
 
-    public UsuarioController() {
-        usuarios.add(new Usuario(1, "Pedro", "Perez", "71234567", "juan.perez@utp.edu.pe", "987654321"));
-        usuarios.add(new Usuario(2, "Maria", "Lopez", "72345678", "maria.lopez@utp.edu.pe", "912345678"));
+    public UsuarioController(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
     }
 
     @GetMapping
-    public ResponseEntity<List<Usuario>> obtenerUsuarios() {
+    public ResponseEntity<List<UsuarioResponse>> obtenerUsuarios() {
+        List<UsuarioResponse> usuarios = usuarioService.listarTodos()
+                .stream()
+                .map(this::convertirAResponse)
+                .toList();
+
         return ResponseEntity.ok(usuarios);
     }
 
     @PostMapping
-    public ResponseEntity<Usuario> crearUsuario(@RequestBody Usuario usuario) {
-        if (usuario.getId() == 0) {
-            usuario.setId(usuarios.size() + 1);
-        }
-        
-        usuarios.add(usuario);
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuario);
+    public ResponseEntity<UsuarioResponse> crearUsuario(
+            @RequestBody Usuario usuario) {
+
+        usuario.setId(null);
+        usuario.setRol("USER");
+
+        Usuario usuarioGuardado = usuarioService.guardar(usuario);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(convertirAResponse(usuarioGuardado));
+    }
+
+    private UsuarioResponse convertirAResponse(Usuario usuario) {
+        return new UsuarioResponse(
+                usuario.getId(),
+                usuario.getNombre(),
+                usuario.getApellido(),
+                usuario.getDni(),
+                usuario.getCorreo(),
+                usuario.getTelefono(),
+                usuario.getRol()
+        );
     }
 }

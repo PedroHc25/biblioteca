@@ -1,9 +1,23 @@
 package pe.edu.utp.biblioteca.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "categorias")
 public class Categoria {
 
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @Column(nullable = false)
     private String nombre;
+
     private String descripcion;
     private String tipo;
     private String estado;
@@ -11,7 +25,7 @@ public class Categoria {
     public Categoria() {
     }
 
-    public Categoria(int id, String nombre, String descripcion,
+    public Categoria(Integer id, String nombre, String descripcion,
                      String tipo, String estado) {
         this.id = id;
         this.nombre = nombre;
@@ -20,11 +34,11 @@ public class Categoria {
         this.estado = estado;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

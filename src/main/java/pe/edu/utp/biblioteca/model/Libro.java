@@ -1,18 +1,35 @@
 package pe.edu.utp.biblioteca.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "libros")
 public class Libro {
 
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @Column(nullable = false)
     private String titulo;
+
+    @Column(nullable = false)
     private String autor;
+
     private String categoria;
-    private int anio;
+    private Integer anio;
     private String estado;
 
     public Libro() {
     }
 
-    public Libro(int id, String titulo, String autor, String categoria, int anio, String estado) {
+    public Libro(Integer id, String titulo, String autor,
+                 String categoria, Integer anio, String estado) {
         this.id = id;
         this.titulo = titulo;
         this.autor = autor;
@@ -21,11 +38,11 @@ public class Libro {
         this.estado = estado;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -53,11 +70,11 @@ public class Libro {
         this.categoria = categoria;
     }
 
-    public int getAnio() {
+    public Integer getAnio() {
         return anio;
     }
 
-    public void setAnio(int anio) {
+    public void setAnio(Integer anio) {
         this.anio = anio;
     }
 
