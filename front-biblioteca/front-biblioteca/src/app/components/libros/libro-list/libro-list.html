@@ -1,1 +1,30 @@
-<p>libro-list works!</p>
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Gestión de Libros</h2>
+    <a routerLink="/libros/nuevo" class="btn btn-success">+ Nuevo Libro</a>
+  </div>
+
+  <table class="table table-striped table-hover shadow-sm">
+    <thead class="table-dark">
+      <tr>
+        <th>ID</th>
+        <th>Título</th>
+        <th>Autor</th>
+        <th>Categoría</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td>Cien Años de Soledad</td>
+        <td>Gabriel García Márquez</td>
+        <td>Novela</td>
+        <td>
+          <a routerLink="/libros/editar/1" class="btn btn-sm btn-warning me-2">Editar</a>
+          <button class="btn btn-sm btn-danger">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
