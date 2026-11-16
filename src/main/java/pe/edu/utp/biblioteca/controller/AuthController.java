@@ -28,15 +28,11 @@ public class AuthController {
         try {
             String token = authService.login(request);
 
-            return ResponseEntity.ok(
-                    Map.of("token", token));
-
+            return ResponseEntity.ok(Map.of("token", token));
         } catch (IllegalArgumentException e) {
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of(
-                            "mensaje",
-                            "Credenciales incorrectas"));
+                    .body(Map.of("mensaje", "Credenciales incorrectas"));
         }
     }
 }

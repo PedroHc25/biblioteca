@@ -35,3 +35,10 @@ out/
 
 ### VS Code ###
 .vscode/
+
+
+# Angular
+front-biblioteca/node_modules/
+front-biblioteca/dist/
+front-biblioteca/.angular/
+

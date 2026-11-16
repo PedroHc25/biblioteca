@@ -1,24 +1,25 @@
 import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { AuthService } from './services/auth';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
 export class App {
   protected readonly title = signal('front-biblioteca');
-    private router = inject(Router);
+  private readonly router = inject(Router);
+  private readonly authService = inject(AuthService);
 
   cerrarSesion(): void {
-    localStorage.removeItem('jwt_token');
+    this.authService.logout();
     this.router.navigate(['/login']);
   }
 
-  estaAutenticado(): boolean {
-    return !!localStorage.getItem('jwt_token');
+  mostrarNavegacion(): boolean {
+    return !this.router.url.startsWith('/login');
   }
 }
 

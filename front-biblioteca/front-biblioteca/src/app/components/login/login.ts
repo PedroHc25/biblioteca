@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-login',
@@ -11,49 +12,39 @@ import { Router } from '@angular/router';
   styleUrl: './login.css'
 })
 export class Login {
-  private readonly TEST_USERS = [
-    { usuario: "admin", password: "12345", rol: "ADMIN" },
-    { usuario: "usuario", password: "12345", rol: "USUARIO" }
-  ];
-
   loginForm = new FormGroup({
-    usuario: new FormControl('', [Validators.required, Validators.minLength(3)]),
-    password: new FormControl('', [Validators.required, Validators.minLength(4)])
+    correo: new FormControl('', [Validators.required, Validators.email]),
+    password: new FormControl('', [Validators.required])
   });
 
   errorMessage: string = '';
   successMessage: string = '';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private authService: AuthService) {}
 
-  onLogin() {
-    if (this.loginForm.invalid) {
-      this.loginForm.markAllAsTouched();
-      this.errorMessage = 'Por favor completa los campos correctamente';
-      return;
-    }
+onLogin() {
+    if (this.loginForm.valid) {
+      const correo = this.loginForm.get('correo')?.value || '';
+      const password = this.loginForm.get('password')?.value || '';
 
-    const { usuario, password } = this.loginForm.value;
-    const user = this.TEST_USERS.find(
-      u => u.usuario === usuario && u.password === password
-    );
-
-    if (user) {
-      localStorage.setItem('usuarioLogueado', JSON.stringify(user));
-      localStorage.setItem('jwt_token', 'token-test-simulado');
-
-      this.successMessage = '¡Bienvenido, ' + user.usuario + '!';
-      this.errorMessage = '';
-
-      setTimeout(() => {
-        if (user.rol === 'ADMIN') {
-          this.router.navigate(['/libros']);
-        } else {
-          this.router.navigate(['/home']);
+      this.authService.login({ email: correo, password }).subscribe({
+        next: (response: any) => {
+          if (response && response.token) {
+            this.errorMessage = '';
+            this.router.navigate(['/libros']);
+          } else {
+            this.errorMessage = 'El servidor no devolvió un token de acceso';
+            this.successMessage = '';
+          }
+        },
+        error: () => {
+          this.errorMessage = 'Usuario o contraseña incorrectos';
+          this.successMessage = '';
         }
-      }, 1000);
+      });
     } else {
-      this.errorMessage = 'Usuario o contraseña incorrectos';
+      this.loginForm.markAllAsTouched();
+      this.errorMessage = 'Por favor completa todos los campos';
       this.successMessage = '';
     }
   }

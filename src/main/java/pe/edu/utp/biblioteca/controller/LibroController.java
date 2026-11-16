@@ -31,6 +31,13 @@ public class LibroController {
         return libroService.listarTodos();
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Libro> obtenerLibro(@PathVariable Integer id) {
+        return libroService.buscarPorId(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
     // POST /api/libros
     @PostMapping
     public ResponseEntity<Libro> crearLibro(@RequestBody Libro libro) {

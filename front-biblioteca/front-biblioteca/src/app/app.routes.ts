@@ -17,10 +17,8 @@ export const routes: Routes = [
   { path: 'libros/editar/:id', component: LibroForm }, 
   { path: 'categorias', component: CategoriaList },
   { path: 'categorias/nueva', component: CategoriaForm },
-  { path: 'categorias/editar/:id', component: CategoriaForm },
   { path: 'usuarios', component: UsuarioList },
   { path: 'usuarios/nuevo', component: UsuarioForm },
-  { path: 'usuarios/editar/:id', component: UsuarioForm },
   { path: 'prestamos', component: PrestamoList }, 
   { path: 'prestamos/nuevo', component: PrestamoForm },
   { path: '**', redirectTo: 'login' }

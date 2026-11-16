@@ -1,35 +1,36 @@
-
 <div class="container d-flex justify-content-center align-items-center vh-100">
-  <div class="card shadow p-4">
+  <div class="card shadow p-4" style="width: 400px;">
 
     <h3 class="text-center mb-4">Biblioteca UTP</h3>
 
     <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+      
+      <!-- Campo correo -->
       <div class="mb-3">
-        <label for="usuario" class="form-label">Usuario</label>
+        <label for="correo" class="form-label">Correo</label>
         <input
-          type="text"
+          type="email"
           class="form-control"
-          id="usuario"
-          formControlName="usuario"
-          placeholder="Ej: admin"
+          id="correo"
+          formControlName="correo"
+          placeholder="Ej: admin@biblioteca.com"
         />
         <div
-          *ngIf="loginForm.get('usuario')?.invalid && loginForm.get('usuario')?.touched"
-          class="text-danger"
+          *ngIf="loginForm.get('correo')?.invalid && loginForm.get('correo')?.touched"
+          class="text-danger small mt-1"
         >
-          <div *ngIf="loginForm.get('usuario')?.hasError('required')">
-            El usuario es obligatorio.
+          <div *ngIf="loginForm.get('correo')?.hasError('required')">
+            El correo es obligatorio.
           </div>
-
-          <div *ngIf="loginForm.get('usuario')?.hasError('minlength')">
-            Debe tener al menos 3 caracteres.
+          <div *ngIf="loginForm.get('correo')?.hasError('email')">
+            Ingresa un correo válido.
           </div>
         </div>
       </div>
+
+      <!-- Campo Contraseña -->
       <div class="mb-3">
         <label for="password" class="form-label">Contraseña</label>
-
         <input
           type="password"
           class="form-control"
@@ -40,27 +41,29 @@
 
         <div
           *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
-          class="text-danger"
+          class="text-danger small mt-1"
         >
           <div *ngIf="loginForm.get('password')?.hasError('required')">
             La contraseña es obligatoria.
           </div>
-
-          <div *ngIf="loginForm.get('password')?.hasError('minlength')">
-            Debe tener al menos 4 caracteres.
+          <!-- <div *ngIf="loginForm.get('password')?.hasError('minlength')">
+            Debe tener al menos 5 caracteres.
           </div>
+          <div *ngIf="loginForm.get('password')?.hasError('pattern')">
+            Debe incluir al menos una letra y un número.
+          </div> -->
         </div>
       </div>
 
-      <!-- Mensajes -->
-      <div *ngIf="errorMessage" class="alert alert-danger">
+      <div *ngIf="errorMessage" class="alert alert-danger py-2 text-center">
         {{ errorMessage }}
       </div>
 
-      <div *ngIf="successMessage" class="alert alert-success">
+      <div *ngIf="successMessage" class="alert alert-success py-2 text-center">
         {{ successMessage }}
       </div>
 
+      <!-- Botones -->
       <button type="submit" class="btn btn-primary w-100">
         Iniciar sesión
       </button>

@@ -1,1 +1,7 @@
-<p>categoria-list works!</p>
+<main class="container py-4">
+  <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4"><div><p class="text-primary fw-semibold mb-1">ORGANIZACIÓN</p><h1 class="h2 mb-0">Categorías</h1></div><a routerLink="/categorias/nueva" class="btn btn-primary">+ Nueva categoría</a></div>
+  <div *ngIf="error" class="alert alert-danger">{{ error }} <button class="btn btn-sm btn-outline-danger ms-2" (click)="cargar()">Reintentar</button></div>
+  <div *ngIf="cargando" class="text-secondary py-4">Cargando categorías…</div>
+  <div *ngIf="!cargando && !error && categorias.length === 0" class="alert alert-info">Todavía no hay categorías registradas.</div>
+  <div *ngIf="!cargando && categorias.length" class="table-responsive card border-0 shadow-sm"><table class="table table-hover align-middle mb-0"><thead class="table-light"><tr><th>Nombre</th><th>Descripción</th><th>Tipo</th><th>Estado</th></tr></thead><tbody><tr *ngFor="let categoria of categorias"><td class="fw-semibold">{{ categoria.nombre }}</td><td>{{ categoria.descripcion || '—' }}</td><td>{{ categoria.tipo || '—' }}</td><td><span class="badge text-bg-secondary">{{ categoria.estado || 'Sin estado' }}</span></td></tr></tbody></table></div>
+</main>
