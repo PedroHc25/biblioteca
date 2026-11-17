@@ -1,0 +1,158 @@
+
+<div class="dashboard">
+
+  <!-- MENÚ LATERAL -->
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-icon">📚</span>
+      <div>
+        <h2>BIBLIOTECA</h2>
+        <small>Sistema de gestión</small>
+      </div>
+    </div>
+
+    <div class="menu-title">MENÚ PRINCIPAL</div>
+
+    <nav class="menu">
+      <a href="#" class="menu-item active">
+        <span>▦</span> Dashboard
+      </a>
+      <a href="#" class="menu-item">
+        <span>📖</span> Libros
+      </a>
+      <a href="#" class="menu-item">
+        <span>📂</span> Categorías
+      </a>
+      <a href="#" class="menu-item">
+        <span>👥</span> Usuarios
+      </a>
+      <a href="#" class="menu-item">
+        <span>🔄</span> Préstamos
+      </a>
+      <a href="#" class="menu-item">
+        <span>🔍</span> Buscar libros
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <span>⚙️</span> Configuración
+    </div>
+  </aside>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="main-content">
+
+    <header class="topbar">
+      <div>
+        <h1>Dashboard</h1>
+        <p>Bienvenido al sistema de gestión de biblioteca.</p>
+      </div>
+
+      <div class="user-profile">
+        <div class="avatar">A</div>
+        <div>
+          <strong>Administrador</strong>
+          <small>Gestión del sistema</small>
+        </div>
+      </div>
+    </header>
+
+    <!-- TARJETAS DE ESTADÍSTICAS -->
+    <section class="stats">
+
+      <article class="stat-card">
+        <div class="stat-icon blue">📚</div>
+        <div>
+          <p>Total de libros</p>
+          <h2>150</h2>
+          <small>Libros registrados</small>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <div class="stat-icon purple">📂</div>
+        <div>
+          <p>Categorías</p>
+          <h2>12</h2>
+          <small>Categorías registradas</small>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <div class="stat-icon green">👥</div>
+        <div>
+          <p>Usuarios</p>
+          <h2>85</h2>
+          <small>Usuarios registrados</small>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <div class="stat-icon orange">🔄</div>
+        <div>
+          <p>Préstamos</p>
+          <h2>24</h2>
+          <small>Préstamos registrados</small>
+        </div>
+      </article>
+
+    </section>
+
+    <!-- TABLA DE LIBROS -->
+    <section class="panel">
+      <div class="panel-header">
+        <div>
+          <h2>Libros recientes</h2>
+          <p>Listado de los últimos libros registrados</p>
+        </div>
+
+        <button class="btn-primary">+ Nuevo libro</button>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>TÍTULO</th>
+              <th>AUTOR</th>
+              <th>CATEGORÍA</th>
+              <th>ESTADO</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>001</td>
+              <td>Cien años de soledad</td>
+              <td>Gabriel García Márquez</td>
+              <td>Novela</td>
+              <td><span class="status available">Disponible</span></td>
+            </tr>
+
+            <tr>
+              <td>002</td>
+              <td>Hábitos atómicos</td>
+              <td>James Clear</td>
+              <td>Desarrollo personal</td>
+              <td><span class="status loaned">Prestado</span></td>
+            </tr>
+
+            <tr>
+              <td>003</td>
+              <td>El principito</td>
+              <td>Antoine de Saint-Exupéry</td>
+              <td>Literatura</td>
+              <td><span class="status available">Disponible</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer class="footer">
+      Sistema de Gestión de Biblioteca | Proyecto académico
+    </footer>
+
+  </main>
+</div>

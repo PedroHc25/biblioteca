@@ -1,0 +1,61 @@
+
+<div class="login-container">
+
+  <div class="login-card">
+
+    <div class="login-header">
+      <div class="login-icon">📚</div>
+      <h1>BIBLIOTECA</h1>
+      <p>Sistema de Gestión Bibliotecaria</p>
+    </div>
+
+    <h2>Iniciar sesión</h2>
+    <p class="subtitle">Ingresa tus credenciales para continuar</p>
+
+    <form (ngSubmit)="iniciarSesion()">
+
+      <div class="form-group">
+        <label for="correo">Correo electrónico</label>
+        <input
+          type="email"
+          id="correo"
+          name="correo"
+          [(ngModel)]="correo"
+          placeholder="usuario@correo.com"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Contraseña</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          [(ngModel)]="password"
+          placeholder="Ingresa tu contraseña"
+          required
+        />
+      </div>
+
+      @if (mensajeError) {
+        <div class="mensaje error">{{ mensajeError }}</div>
+      }
+
+      @if (mensajeExito) {
+        <div class="mensaje exito">{{ mensajeExito }}</div>
+      }
+
+      <button type="submit" [disabled]="cargando">
+        {{ cargando ? 'Verificando...' : 'Iniciar sesión' }}
+      </button>
+
+    </form>
+
+    <div class="login-footer">
+      Sistema de Gestión de Biblioteca
+    </div>
+
+  </div>
+
+</div>
