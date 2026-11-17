@@ -1,0 +1,84 @@
+<main class="container py-4">
+  <div
+    class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4"
+  >
+    <div>
+      <h1 class="h2 mb-0">
+        Autores
+      </h1>
+    </div>
+
+    <a routerLink="/autores/nuevo" class="btn btn-primary">
+      + Nuevo autor
+    </a>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+
+    <button
+      class="btn btn-sm btn-outline-danger ms-2"
+      (click)="cargar()"
+    >
+      Reintentar
+    </button>
+  </div>
+
+  <div *ngIf="cargando" class="text-secondary py-4">
+    Cargando autores…
+  </div>
+
+  <div
+    *ngIf="!cargando && !error && autores.length === 0"
+    class="alert alert-info"
+  >
+    Todavía no hay autores registrados.
+  </div>
+
+  <div
+    *ngIf="!cargando && autores.length"
+    class="table-responsive card border-0 shadow-sm"
+  >
+    <table class="table table-hover align-middle mb-0">
+      <thead class="table-light">
+        <tr>
+          <th>Nombre completo</th>
+          <th>Nacionalidad</th>
+          <th>Estado</th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let autor of autores">
+          <td class="fw-semibold">
+            {{ autor.nombreCompleto }}
+          </td>
+
+          <td>
+            {{ autor.nacionalidad || '—' }}
+          </td>
+
+          <td>
+            <span
+              class="badge"
+              [class.text-bg-success]="autor.estado === 'Activo'"
+              [class.text-bg-secondary]="autor.estado !== 'Activo'"
+            >
+              {{ autor.estado }}
+            </span>
+          </td>
+
+          <td class="text-end">
+            <a
+              class="btn btn-sm btn-outline-primary"
+              [routerLink]="['/autores/editar', autor.id]"
+            >
+              Editar
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</main>

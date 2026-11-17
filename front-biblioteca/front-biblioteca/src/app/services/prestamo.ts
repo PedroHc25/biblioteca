@@ -14,13 +14,33 @@ export interface Prestamo {
 @Injectable({ providedIn: 'root' })
 export class PrestamoService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'http://localhost:8081/api/prestamos';
+  private readonly apiUrl =
+    'http://localhost:8081/api/prestamos';
 
   listar(): Observable<Prestamo[]> {
     return this.http.get<Prestamo[]>(this.apiUrl);
   }
 
+  obtener(id: number): Observable<Prestamo> {
+    return this.http.get<Prestamo>(
+      `${this.apiUrl}/${id}`
+    );
+  }
+
   crear(prestamo: Prestamo): Observable<Prestamo> {
-    return this.http.post<Prestamo>(this.apiUrl, prestamo);
+    return this.http.post<Prestamo>(
+      this.apiUrl,
+      prestamo
+    );
+  }
+
+  actualizar(
+    id: number,
+    prestamo: Prestamo
+  ): Observable<Prestamo> {
+    return this.http.put<Prestamo>(
+      `${this.apiUrl}/${id}`,
+      prestamo
+    );
   }
 }

@@ -22,4 +22,17 @@ export class CategoriaService {
   crear(categoria: Categoria): Observable<Categoria> {
     return this.http.post<Categoria>(this.apiUrl, categoria);
   }
+
+  obtener(id: number): Observable<Categoria> {
+    return this.http.get<Categoria>(
+      `${this.apiUrl}/${id}`
+    );
+  }
+
+  actualizar(id: number, categoria: Categoria): Observable<Categoria> {
+      return this.http.put<Categoria>(
+        `${this.apiUrl}/${id}`,
+        categoria
+      );
+  }
 }

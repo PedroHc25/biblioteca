@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import pe.edu.utp.biblioteca.model.Categoria;
 import pe.edu.utp.biblioteca.service.CategoriaService;
 
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+
 @RestController
 @RequestMapping("/api/categorias")
 public class CategoriaController {
@@ -39,5 +42,27 @@ public class CategoriaController {
                 .body(categoriaGuardada);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Categoria> obtenerCategoria(
+            @PathVariable Integer id) {
+
+        return categoriaService.buscarPorId(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+    
+    @PutMapping("/{id}")
+public ResponseEntity<Categoria> actualizarCategoria(
+        @PathVariable Integer id,
+        @RequestBody Categoria categoria) {
+
+    return categoriaService.buscarPorId(id)
+            .map(existente ->
+                    ResponseEntity.ok(
+                            categoriaService.actualizar(id, categoria)
+                    )
+            )
+            .orElseGet(() -> ResponseEntity.notFound().build());
+}
 
 }

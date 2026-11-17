@@ -1,10 +1,15 @@
 package pe.edu.utp.biblioteca.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -18,18 +23,34 @@ public class Libro {
     @Column(nullable = false)
     private String titulo;
 
-    @Column(nullable = false)
-    private String autor;
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "autor_id", nullable = false)
+    @JsonIgnoreProperties({
+            "hibernateLazyInitializer",
+            "handler"
+    })
+    private Autor autor;
 
+    @Column(nullable = false)
     private String categoria;
+
+    @Column(nullable = false)
     private Integer anio;
+
+    @Column(nullable = false)
     private String estado;
 
     public Libro() {
     }
 
-    public Libro(Integer id, String titulo, String autor,
-                 String categoria, Integer anio, String estado) {
+    public Libro(
+            Integer id,
+            String titulo,
+            Autor autor,
+            String categoria,
+            Integer anio,
+            String estado) {
+
         this.id = id;
         this.titulo = titulo;
         this.autor = autor;
@@ -54,11 +75,11 @@ public class Libro {
         this.titulo = titulo;
     }
 
-    public String getAutor() {
+    public Autor getAutor() {
         return autor;
     }
 
-    public void setAutor(String autor) {
+    public void setAutor(Autor autor) {
         this.autor = autor;
     }
 

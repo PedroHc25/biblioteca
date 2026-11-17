@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import pe.edu.utp.biblioteca.dto.LibroRequest;
 import pe.edu.utp.biblioteca.model.Libro;
 import pe.edu.utp.biblioteca.service.LibroService;
 
@@ -25,35 +26,44 @@ public class LibroController {
         this.libroService = libroService;
     }
 
-    // GET /api/libros
     @GetMapping
     public List<Libro> obtenerLibros() {
         return libroService.listarTodos();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Libro> obtenerLibro(@PathVariable Integer id) {
+    public ResponseEntity<Libro> obtenerLibro(
+            @PathVariable Integer id) {
+
         return libroService.buscarPorId(id)
                 .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElseGet(() ->
+                        ResponseEntity.notFound().build());
     }
 
-    // POST /api/libros
     @PostMapping
-    public ResponseEntity<Libro> crearLibro(@RequestBody Libro libro) {
+    public ResponseEntity<Libro> crearLibro(
+            @RequestBody LibroRequest libro) {
+
         Libro libroGuardado = libroService.guardar(libro);
+
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(libroGuardado);
     }
 
-    // PUT /api/libros/{id}
     @PutMapping("/{id}")
     public ResponseEntity<Libro> actualizarLibro(
-            @PathVariable Integer id, @RequestBody Libro libro) {
+            @PathVariable Integer id,
+            @RequestBody LibroRequest libro) {
+
         return libroService.buscarPorId(id)
                 .map(existente ->
-                        ResponseEntity.ok(libroService.actualizar(id, libro)))
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                        ResponseEntity.ok(
+                                libroService.actualizar(id, libro)
+                        )
+                )
+                .orElseGet(() ->
+                        ResponseEntity.notFound().build());
     }
 }

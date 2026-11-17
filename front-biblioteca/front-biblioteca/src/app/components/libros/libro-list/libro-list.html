@@ -1,6 +1,6 @@
 <main class="container py-4">
   <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
-    <div><p class="text-primary fw-semibold mb-1">CATÁLOGO</p><h1 class="h2 mb-0">Libros</h1></div>
+    <div><h1 class="h2 mb-0">Libros</h1></div>
     <a routerLink="/libros/nuevo" class="btn btn-primary">+ Nuevo libro</a>
   </div>
 
@@ -10,10 +10,10 @@
 
   <div *ngIf="!cargando && libros.length" class="table-responsive card border-0 shadow-sm">
     <table class="table table-hover align-middle mb-0">
-      <thead class="table-light"><tr><th>Título</th><th>Autor</th><th>Categoría</th><th>Año</th><th>Estado</th><th></th></tr></thead>
+      <thead class="table-light"><tr><th>Título</th><th>Autor</th><th>Categoría</th><th>Año</th><th>Estado</th><th>Acciones</th></tr></thead>
       <tbody>
         <tr *ngFor="let libro of libros">
-          <td class="fw-semibold">{{ libro.titulo }}</td><td>{{ libro.autor }}</td><td>{{ libro.categoria || '—' }}</td><td>{{ libro.anio || '—' }}</td>
+          <td class="fw-semibold">{{ libro.titulo }}</td><td>{{ libro.autor?.nombreCompleto || '—' }}</td><td>{{ libro.categoria || '—' }}</td><td>{{ libro.anio || '—' }}</td>
           <td><span class="badge" [class.text-bg-success]="libro.estado === 'Disponible'" [class.text-bg-secondary]="libro.estado !== 'Disponible'">{{ libro.estado || 'Sin estado' }}</span></td>
           <td class="text-end"><a class="btn btn-sm btn-outline-primary" [routerLink]="['/libros/editar', libro.id]">Editar</a></td>
         </tr>

@@ -1,7 +1,141 @@
-<main class="container py-4" style="max-width: 720px"><a routerLink="/categorias" class="link-secondary text-decoration-none">← Volver a categorías</a><section class="card border-0 shadow-sm mt-3"><div class="card-body p-4"><p class="text-primary fw-semibold mb-1">ORGANIZACIÓN</p><h1 class="h3 mb-4">Nueva categoría</h1><div *ngIf="error" class="alert alert-danger">{{ error }}</div>
-<form [formGroup]="form" (ngSubmit)="guardar()" novalidate>
-  <div class="mb-3"><label class="form-label" for="nombre">Nombre</label><input id="nombre" class="form-control" formControlName="nombre"><div *ngIf="form.controls.nombre.touched && form.controls.nombre.invalid" class="text-danger small">El nombre es obligatorio.</div></div>
-  <div class="mb-3"><label class="form-label" for="descripcion">Descripción</label><textarea id="descripcion" class="form-control" rows="3" formControlName="descripcion"></textarea></div>
-  <div class="row"><div class="col-md-6 mb-3"><label class="form-label" for="tipo">Tipo</label><input id="tipo" class="form-control" formControlName="tipo" placeholder="Ej. Literatura"></div><div class="col-md-6 mb-3"><label class="form-label" for="estado">Estado</label><select id="estado" class="form-select" formControlName="estado"><option>Activa</option><option>Inactiva</option></select></div></div>
-  <div class="d-flex justify-content-end gap-2"><a routerLink="/categorias" class="btn btn-outline-secondary">Cancelar</a><button type="submit" class="btn btn-primary" [disabled]="guardando">{{ guardando ? 'Guardando…' : 'Guardar categoría' }}</button></div>
-</form></div></section></main>
+<main class="container py-4" style="max-width: 720px">
+  <a
+    routerLink="/categorias"
+    class="link-secondary text-decoration-none"
+  >
+    ← Volver a categorías
+  </a>
+
+  <section class="card border-0 shadow-sm mt-3">
+    <div class="card-body p-4">
+
+      <h1 class="h3 mb-4">
+        {{ id ? 'Editar categoría' : 'Nueva categoría' }}
+      </h1>
+
+      <div *ngIf="error" class="alert alert-danger">
+        {{ error }}
+      </div>
+
+      <div *ngIf="cargando" class="text-secondary">
+        Cargando categoría…
+      </div>
+
+      <form
+        *ngIf="!cargando"
+        [formGroup]="form"
+        (ngSubmit)="guardar()"
+        novalidate
+      >
+        <div class="mb-3">
+          <label class="form-label" for="nombre">
+            Nombre
+          </label>
+
+          <input
+            id="nombre"
+            class="form-control"
+            formControlName="nombre"
+          >
+
+          <div
+            *ngIf="
+              form.controls.nombre.touched &&
+              form.controls.nombre.invalid
+            "
+            class="text-danger small mt-1"
+          >
+            El nombre es obligatorio.
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="descripcion">
+            Descripción (opcional)
+          </label>
+
+          <textarea
+            id="descripcion"
+            class="form-control"
+            rows="3"
+            formControlName="descripcion"
+          ></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="tipo">
+            Tipo
+          </label>
+
+          <input
+            id="tipo"
+            class="form-control"
+            formControlName="tipo"
+            placeholder="Ej. Literatura"
+          >
+
+          <div
+            *ngIf="
+              form.controls.tipo.touched &&
+              form.controls.tipo.invalid
+            "
+            class="text-danger small mt-1"
+          >
+            El tipo es obligatorio.
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label" for="estado">
+            Estado
+          </label>
+
+          <select
+            id="estado"
+            class="form-select"
+            formControlName="estado"
+          >
+            <option value="" disabled>
+              Selecciona un estado
+            </option>
+            <option value="Activa">Activa</option>
+            <option value="Inactiva">Inactiva</option>
+          </select>
+
+          <div
+            *ngIf="
+              form.controls.estado.touched &&
+              form.controls.estado.invalid
+            "
+            class="text-danger small mt-1"
+          >
+            Selecciona un estado.
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2">
+          <a
+            routerLink="/categorias"
+            class="btn btn-outline-secondary"
+          >
+            Cancelar
+          </a>
+
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="guardando"
+          >
+            {{
+              guardando
+                ? 'Guardando…'
+                : id
+                  ? 'Actualizar categoría'
+                  : 'Guardar categoría'
+            }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>

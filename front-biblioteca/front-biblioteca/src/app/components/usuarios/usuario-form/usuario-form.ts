@@ -3,11 +3,17 @@ import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { NuevoUsuario, UsuarioService } from '../../../services/usuario';
+import { AuthService } from '../../../services/auth';
 
 @Component({ selector: 'app-usuario-form', standalone: true, imports: [CommonModule, ReactiveFormsModule, RouterLink], templateUrl: './usuario-form.html', styleUrl: './usuario-form.css' })
 export class UsuarioForm {
   private readonly service = inject(UsuarioService);
   private readonly router = inject(Router);
+  private readonly authService = inject(AuthService);
+  readonly esRegistroPublico = !this.authService.estaLogueado();
+  readonly rutaRetorno = this.esRegistroPublico
+    ? '/login'
+    : '/usuarios';
   guardando = false;
   error = '';
   form = new FormGroup({
@@ -24,7 +30,7 @@ export class UsuarioForm {
     this.guardando = true;
     this.error = '';
     this.service.crear(this.form.getRawValue() as NuevoUsuario).subscribe({
-      next: () => this.router.navigate(['/usuarios']),
+      next: () => this.router.navigate([this.rutaRetorno]),
       error: (response) => {
         this.error = response.status === 409
           ? 'El correo o DNI ya está registrado.'

@@ -49,9 +49,7 @@ onLogin() {
     }
   }
 
-  onRegistro() {
-    this.errorMessage = '';
-    this.successMessage = 'Función de registro disponible (simulado)';
-    setTimeout(() => this.successMessage = '', 3000);
+  onRegistro(): void {
+    this.router.navigate(['/usuarios/nuevo']);
   }
 }

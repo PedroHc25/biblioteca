@@ -1,4 +1,36 @@
-<main class="container py-4"><div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4"><div><p class="text-primary fw-semibold mb-1">CIRCULACIÓN</p><h1 class="h2 mb-0">Préstamos</h1></div><a routerLink="/prestamos/nuevo" class="btn btn-primary">+ Nuevo préstamo</a></div>
-  <div *ngIf="error" class="alert alert-danger">{{ error }} <button class="btn btn-sm btn-outline-danger ms-2" (click)="cargar()">Reintentar</button></div><div *ngIf="cargando" class="text-secondary py-4">Cargando préstamos…</div><div *ngIf="!cargando && !error && prestamos.length === 0" class="alert alert-info">Todavía no hay préstamos registrados.</div>
-  <div *ngIf="!cargando && prestamos.length" class="table-responsive card border-0 shadow-sm"><table class="table table-hover align-middle mb-0"><thead class="table-light"><tr><th>Usuario</th><th>Libro</th><th>Fecha de préstamo</th><th>Devolución</th><th>Estado</th></tr></thead><tbody><tr *ngFor="let prestamo of prestamos"><td class="fw-semibold">{{ nombreUsuario(prestamo.usuarioId) }}</td><td>{{ tituloLibro(prestamo.libroId) }}</td><td>{{ prestamo.fechaPrestamo }}</td><td>{{ prestamo.fechaDevolucion || '—' }}</td><td><span class="badge text-bg-secondary">{{ prestamo.estado || 'Pendiente' }}</span></td></tr></tbody></table></div>
+<main class="container py-4">
+  <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+    <div>
+      <h1 class="h2 mb-0">Préstamos</h1>
+    </div><a routerLink="/prestamos/nuevo" class="btn btn-primary">+ Nuevo préstamo</a>
+  </div>
+  <div *ngIf="error" class="alert alert-danger">{{ error }} <button class="btn btn-sm btn-outline-danger ms-2"
+      (click)="cargar()">Reintentar</button></div>
+  <div *ngIf="cargando" class="text-secondary py-4">Cargando préstamos…</div>
+  <div *ngIf="!cargando && !error && prestamos.length === 0" class="alert alert-info">Todavía no hay préstamos
+    registrados.</div>
+  <div *ngIf="!cargando && prestamos.length" class="table-responsive card border-0 shadow-sm">
+    <table class="table table-hover align-middle mb-0">
+      <thead class="table-light">
+        <tr>
+          <th>Usuario</th>
+          <th>Libro</th>
+          <th>Fecha de préstamo</th>
+          <th>Devolución</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let prestamo of prestamos">
+          <td class="fw-semibold">{{ nombreUsuario(prestamo.usuarioId) }}</td>
+          <td>{{ tituloLibro(prestamo.libroId) }}</td>
+          <td>{{ prestamo.fechaPrestamo }}</td>
+          <td>{{ prestamo.fechaDevolucion || '—' }}</td>
+          <td><span class="badge text-bg-secondary">{{ prestamo.estado || 'Pendiente' }}</span></td>
+          <td class="text-end"><a class="btn btn-sm btn-outline-primary" [routerLink]="['/prestamos/editar', prestamo.id]">Editar</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </main>

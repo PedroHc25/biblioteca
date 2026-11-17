@@ -19,7 +19,8 @@ export class App {
   }
 
   mostrarNavegacion(): boolean {
-    return !this.router.url.startsWith('/login');
+    return this.authService.estaLogueado()
+      && !this.router.url.startsWith('/login');
   }
 }
 

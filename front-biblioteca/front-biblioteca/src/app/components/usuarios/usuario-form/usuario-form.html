@@ -1,8 +1,48 @@
-<main class="container py-4" style="max-width: 760px"><a routerLink="/usuarios" class="link-secondary text-decoration-none">← Volver a usuarios</a><section class="card border-0 shadow-sm mt-3"><div class="card-body p-4"><p class="text-primary fw-semibold mb-1">CUENTAS</p><h1 class="h3 mb-4">Nuevo usuario</h1><div *ngIf="error" class="alert alert-danger">{{ error }}</div>
-<form [formGroup]="form" (ngSubmit)="guardar()" novalidate>
-  <div class="row"><div class="col-md-6 mb-3"><label for="nombre" class="form-label">Nombre</label><input id="nombre" class="form-control" formControlName="nombre"><div *ngIf="form.controls.nombre.touched && form.controls.nombre.invalid" class="text-danger small">Campo obligatorio.</div></div><div class="col-md-6 mb-3"><label for="apellido" class="form-label">Apellido</label><input id="apellido" class="form-control" formControlName="apellido"><div *ngIf="form.controls.apellido.touched && form.controls.apellido.invalid" class="text-danger small">Campo obligatorio.</div></div></div>
-  <div class="row"><div class="col-md-6 mb-3"><label for="dni" class="form-label">DNI</label><input id="dni" class="form-control" formControlName="dni"><div *ngIf="form.controls.dni.touched && form.controls.dni.invalid" class="text-danger small">Campo obligatorio.</div></div><div class="col-md-6 mb-3"><label for="telefono" class="form-label">Teléfono</label><input id="telefono" class="form-control" formControlName="telefono" inputmode="tel"></div></div>
-  <div class="mb-3"><label for="correo" class="form-label">Correo</label><input id="correo" type="email" class="form-control" formControlName="correo"><div *ngIf="form.controls.correo.touched && form.controls.correo.invalid" class="text-danger small">Ingresa un correo válido.</div></div>
-  <div class="mb-4"><label for="password" class="form-label">Contraseña inicial</label><input id="password" type="password" class="form-control" formControlName="password" autocomplete="new-password"><div *ngIf="form.controls.password.touched && form.controls.password.invalid" class="text-danger small">Debe tener al menos 8 caracteres.</div><div class="form-text">El backend la guardará cifrada y asignará el rol USER.</div></div>
-  <div class="d-flex justify-content-end gap-2"><a routerLink="/usuarios" class="btn btn-outline-secondary">Cancelar</a><button type="submit" class="btn btn-primary" [disabled]="guardando">{{ guardando ? 'Guardando…' : 'Crear usuario' }}</button></div>
-</form></div></section></main>
+<main class="container py-4" style="max-width: 760px">
+  <a [routerLink]="rutaRetorno" class="link-secondary text-decoration-none">{{ esRegistroPublico ? '← Volver al inicio de sesión' : '← Volver a usuarios' }}</a>
+  <section class="card border-0 shadow-sm mt-3">
+    <div class="card-body p-4">
+      <p class="text-primary fw-semibold mb-1"></p>
+      <h1 class="h3 mb-4">{{ esRegistroPublico ? 'Crear cuenta' : 'Nuevo usuario' }}</h1>
+      <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+      <form [formGroup]="form" (ngSubmit)="guardar()" novalidate>
+        <div class="row">
+          <div class="col-md-6 mb-3"><label for="nombre" class="form-label">Nombre</label><input id="nombre"
+              class="form-control" formControlName="nombre">
+            <div *ngIf="form.controls.nombre.touched && form.controls.nombre.invalid" class="text-danger small">Campo
+              obligatorio.</div>
+          </div>
+          <div class="col-md-6 mb-3"><label for="apellido" class="form-label">Apellido</label><input id="apellido"
+              class="form-control" formControlName="apellido">
+            <div *ngIf="form.controls.apellido.touched && form.controls.apellido.invalid" class="text-danger small">
+              Campo obligatorio.</div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3"><label for="dni" class="form-label">DNI</label><input id="dni" class="form-control"
+              formControlName="dni">
+            <div *ngIf="form.controls.dni.touched && form.controls.dni.invalid" class="text-danger small">Campo
+              obligatorio.</div>
+          </div>
+          <div class="col-md-6 mb-3"><label for="telefono" class="form-label">Teléfono</label><input id="telefono"
+              class="form-control" formControlName="telefono" inputmode="tel"></div>
+        </div>
+        <div class="mb-3"><label for="correo" class="form-label">Correo</label><input id="correo" type="email"
+            class="form-control" formControlName="correo">
+          <div *ngIf="form.controls.correo.touched && form.controls.correo.invalid" class="text-danger small">Ingresa un
+            correo válido.</div>
+        </div>
+        <div class="mb-4"><label for="password" class="form-label">Contraseña inicial</label><input id="password"
+            type="password" class="form-control" formControlName="password" autocomplete="new-password">
+          <div *ngIf="form.controls.password.touched && form.controls.password.invalid" class="text-danger small">Debe
+            tener al menos 8 caracteres.</div>
+          <div class="form-text">El backend la guardará cifrada y asignará el rol USER.</div>
+        </div>
+        <div class="d-flex justify-content-end gap-2">
+          <a [routerLink]="rutaRetorno" class="btn btn-outline-secondary">Cancelar</a>
+          <button type="submit" class="btn btn-primary" [disabled]="guardando">{{ guardando ? 'Guardando…' : 'Crear usuario' }}</button>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
