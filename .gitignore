@@ -1,44 +1,43 @@
-HELP.md
-.gradle
-build/
-!gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
+# BACKEND - SPRING BOOT / GRADLE
+backend/.gradle/
+backend/build/
+backend/bin/
+backend/out/
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
+# FRONTEND - ANGULAR / NODE
+frontend/node_modules/
+frontend/.angular/
+frontend/dist/
+frontend/coverage/
 
-### IntelliJ IDEA ###
-.idea
+# ARCHIVOS DE ENTORNO
+.env
+.env.*
+!.env.example
+
+# IDE
+.idea/
 *.iws
 *.iml
 *.ipr
-out/
-!**/src/main/**/out/
-!**/src/test/**/out/
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache/
+.apt_generated/
 
-### NetBeans ###
+# NETBEANS
 /nbproject/private/
 /nbbuild/
-/dist/
 /nbdist/
 /.nb-gradle/
 
-### VS Code ###
+# VS CODE
 .vscode/
 
-
-# Angular
-front-biblioteca/node_modules/
-front-biblioteca/dist/
-front-biblioteca/.angular/
-
+# SISTEMA OPERATIVO
+.DS_Store
+Thumbs.db
+desktop.ini
